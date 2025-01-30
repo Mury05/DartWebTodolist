@@ -1,7 +1,5 @@
-// Mise en place de TodolistConsole avec Dart
-
 import 'dart:convert';
-import 'dart:io';
+import 'dart:html';
 import '../task/task.dart';
 
 class TodoList {
@@ -9,7 +7,7 @@ class TodoList {
 
   // Fonction pour récupérer la liste des todos
   List<Task> getTasksList() {
-    loadTodosFromFile();
+    loadTodosFromStorage();
     return tasksList;
   }
 
@@ -18,7 +16,7 @@ class TodoList {
     if (description.isNotEmpty && description.trim() != "") {
       Task newTask = Task(description);
       getTasksList().add(newTask);
-      saveTodosInFile();
+      saveTodosInStorage();
       print("Tâche ajoutée avec succès !");
     } else {
       print("La description de la tâche ne peut pas être vide !");
@@ -27,7 +25,7 @@ class TodoList {
 
   // Fonction pour supprimer un todo
   void deleteTask(int id) {
-    loadTodosFromFile();
+    loadTodosFromStorage();
     Task? checkTask;
     for (Task task in getTasksList()) {
       if (task.id == id) {
@@ -38,7 +36,7 @@ class TodoList {
 
     if (checkTask != null) {
       tasksList.remove(checkTask);
-      saveTodosInFile();
+      saveTodosInStorage();
       print("Tâche supprimée avec succès !");
     } else {
       print("Aucune tâche trouvée avec cet identifiant !");
@@ -46,9 +44,9 @@ class TodoList {
   }
 
   void deleteAllTask() {
-    loadTodosFromFile();
+    loadTodosFromStorage();
     tasksList.clear();
-    saveTodosInFile();
+    saveTodosInStorage();
     print("Toutes les tâches ont été supprimées avec succès !");
   }
 
@@ -64,7 +62,7 @@ class TodoList {
 
     if (checkTask != null) {
       checkTask.statut = !checkTask.statut;
-      saveTodosInFile();
+      saveTodosInStorage();
       print("Statut de la tâche modifié avec succès !");
     } else {
       print("Aucune tâche trouvée avec cet identifiant !");
@@ -83,7 +81,7 @@ class TodoList {
 
     if (checkTask != null) {
       checkTask.description = newDescription;
-      saveTodosInFile();
+      saveTodosInStorage();
       print("Tâche modifiée avec succès !");
     } else {
       print("Aucune tâche trouvée avec cet identifiant !");
@@ -120,35 +118,16 @@ class TodoList {
     }
   }
 
-  // void saveTodosInFile() {
-  //   File file = File('todos.txt');
-  //   file.writeAsStringSync(jsonEncode(tasksList));
-  // }
-
-  // void loadTodosFromFile() {
-  //   File file = File('todos.txt');
-  //   if (file.existsSync()) {
-  //     String content = file.readAsStringSync();
-  //     tasksList = List<Task>.from(jsonDecode(content));
-  //   } else {
-  //     tasksList = [];
-  //   }
-  // }
-
-  // Mettre en place le système de fichiers pour la sauvegarde des todos
-  void saveTodosInFile() {
-    File file = File('todos.txt');
-    List<Map<String, dynamic>> jsonList =
-        tasksList.map((task) => task.toJson()).toList();
-    file.writeAsStringSync(jsonEncode(jsonList), mode: FileMode.write);
+ // Fonction pour sauvegarder les tâches dans localStorage
+  void saveTodosInStorage() {
+    window.localStorage['todos'] = jsonEncode(tasksList.map((task) => task.toJson()).toList());
   }
 
-  // Récupérer la liste des todos depuis le fichier
-  void loadTodosFromFile() {
-    File file = File('todos.txt');
-    if (file.existsSync()) {
-      String content = file.readAsStringSync();
-      List<dynamic> jsonList = jsonDecode(content);
+  // Fonction pour charger les tâches depuis localStorage
+  void loadTodosFromStorage() {
+    String? storedData = window.localStorage['todos'];
+    if (storedData != null) {
+      List<dynamic> jsonList = jsonDecode(storedData);
       tasksList = jsonList.map((json) => Task.fromJson(json)).toList();
     } else {
       tasksList = [];
