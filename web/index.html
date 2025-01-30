@@ -1,19 +1,44 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk" />
     <title>dart_web_todolist</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="styles.css" />
     <script defer src="main.dart.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
+    
+    <main class="flex items-center justify-center mt-10">
+      <div class="w-1/2" >
 
-  <div id="output"></div>
-
-</body>
+        <div id="output" class="text-2xl" >Bienvenue sur notre application de Todolist !</div>
+        <div class="mx-auto w-full bg-white shadow-lg rounded-lg overflow-hidden mt-8">
+            <div class="px-4 py-2">
+                <h1 class="text-gray-800 font-bold text-2xl uppercase">To Do List</h1>
+            </div>
+            <form class="w-full mx-auto px-4 py-2" id="myForm" onsubmit="event.preventDefault();">
+                <div class="flex items-center border-b-2 border-green-500 py-2">
+                    <input
+                        class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                        type="text" placeholder="Add a task" id="task" required>
+                    <button
+                        class="flex-shrink-0 cursor-pointer bg-green-500 hover:bg-green-700 border-green-500 hover:border-green-700 
+                        transition ease-in-out delay-150 duration-200 text-sm border-4 text-white py-1 px-2 rounded"
+                        type="submit" id="btnSubmit">
+                        Add
+                    </button>
+                </div>
+            </form>
+            <ul id="todo-list" class="divide-y divide-gray-200 px-4"></ul>
+        </div>
+      </div>
+  </main>
+  
+  </body>
 </html>
